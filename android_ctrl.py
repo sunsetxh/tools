@@ -10,14 +10,15 @@ def tap(x, y):
 
 def sleep(sec):
     if sec < 1:
+        print('sleep {}ms '.format(1000 * sec))
         time.sleep(sec)
     else:
         while sec != 0:
-            sys.stdout.write('\r sleep {}m {}s '.format((int(sec / 60)), (sec % 60)))
+            sys.stdout.write('\rsleep {}m {}s '.format((int(sec / 60)), (sec % 60)))
             sys.stdout.flush()
             time.sleep(1)
             sec = sec - 1
-    print('')
+        print('')
 
 
 def up():
