@@ -9,11 +9,15 @@ def tap(x, y):
 
 
 def sleep(sec):
-    while sec != 0:
-        sys.stdout.write('\r sleep {}m {}s '.format((int(sec / 60)), (sec % 60)))
-        sys.stdout.flush()
-        time.sleep(1)
-        sec = sec - 1
+    if sec < 1:
+        time.sleep(sec)
+    else
+        while sec != 0:
+            sys.stdout.write('\r sleep {}m {}s '.format((int(sec / 60)), (sec % 60)))
+            sys.stdout.flush()
+            time.sleep(1)
+            sec = sec - 1
+    print('')
 
 
 def up():
