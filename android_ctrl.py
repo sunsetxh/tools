@@ -10,7 +10,7 @@ def tap(x, y):
 
 def sleep(sec):
     if sec < 1:
-        print('sleep {}ms '.format(1000 * sec))
+        print('sleep {}ms '.format(int(1000 * sec)))
         time.sleep(sec)
     else:
         while sec != 0:
