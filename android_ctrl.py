@@ -163,7 +163,7 @@ def tap_without_hp():
     i = 0
     while 1:
         btn1_1()
-        dialog_btn_1()
+        dialog_btn_5()
         i += 1
         print(i)
         print("学费 : %d" % (i * 3000))
@@ -285,7 +285,7 @@ def tiaoxi(min):
 
 
 def run():
-    tiaoxi(10)
+    task_nanyang()
 
 
 if __name__ == '__main__':
