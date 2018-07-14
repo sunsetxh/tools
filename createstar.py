@@ -3,15 +3,17 @@
 import os
 import re
 
+import operator
+
 __author__ = 'WangYuchao'
 
 import sys
 import getopt
 
-labels = ['_rlnMicrographName', '_rlnCoordinateX', '_rlnCoordinateY', '_rlnImageName',
-          '_rlnDefocusU', '_rlnDefocusV', '_rlnDefocusAngle', '_rlnVoltage',
-          '_rlnSphericalAberration', '_rlnAmplitudeContrast',
-          '_rlnMagnification', '_rlnDetectorPixelSize', '_rlnCtfFigureOfMerit']
+labels = ['MicrographName', 'CoordinateX', 'CoordinateY', 'ImageName',
+          'DefocusU', 'DefocusV', 'DefocusAngle', 'Voltage',
+          'SphericalAberration', 'AmplitudeContrast',
+          'Magnification', 'DetectorPixelSize', 'CtfFigureOfMerit']
 
 simplehead = """
 data_
@@ -57,12 +59,33 @@ def readstarfile(filename):
 
 def getclassdata(filename, k):
     headdict, data = readstarfile(filename)
-    newdata=[]
+    newdata = []
     for line in data:
         for classnum in k:
             if int(line.split()[headdict.get('ClassNumber', 0)]) == classnum:
                 newdata.append(line)
-    return headdict,newdata
+    return headdict, newdata
+
+
+def savestar(filename,headdict,data,simple=1):
+    file=open(filename,'w')
+    if simple ==1:
+        file.write(simplehead)
+        labelitems=[]
+        for label in labels:
+            labelitems.append(headdict.get(label,0))
+        for item in data:
+            for j in labelitems:
+                file.write('{}\t'.format(item.split()[j]))
+            file.write('\n')
+    else:
+        file.write('\ndata_\nloop_\n')
+        head=sorted(headdict.items(),key=operator.itemgetter(1))
+        for name,value in head:
+            file.write('_rln{} #{}\n'.format(name,value))
+
+        file.write(data)
+    file.close()
 
 
 def main():
@@ -71,8 +94,8 @@ def main():
     input_file = ""
     output_file = ""
     source_file = ""
-    simp = 0
-    k=[]
+    simp = 1
+    k = []
 
     if len(opts) == 0:
         usage()
@@ -86,7 +109,7 @@ def main():
         elif op == "-s":
             source_file = value
         elif op == "-k":
-            for i in value.split():
+            for i in value.split(','):
                 k.append(int(i))
         elif op == "-d":
             simp = 1
@@ -102,7 +125,7 @@ def main():
         print("请添加输出文件名 使用 -o file_name\n")
         sys.exit()
 
-    if len(source_file) == 0:
+    if len(source_file) == 0 and input_file.find('.star') == -1:
         print("请添加原文件 使用 -s file_name\n")
         sys.exit()
 
@@ -120,61 +143,32 @@ def main():
 
     if input_file.find('.star') != -1:
         if len(k) == 0:
-            print "请输入需要提取的类的序号，使用 －k \"0,1\""
+            print("请输入需要提取的类的序号，使用 －k \"0,1\"")
             sys.exit()
-        headdict,data=getclassdata(input_file,k)
-
-
-    f_input = open(input_file, 'r')  # 获取需要提取的序号
-    str_index = f_input.readline()
-    index = str_index.split()
-
-    f_source = open(source_file, 'r')
-
-    f_output = open(output_file, 'w')
-
-    lines = f_source.readlines()
-
-    head = 0
-    for line in lines:
-        if len(line.split()) < 3:
-            head += 1
-        else:
-            break
-
-    if simp == 1:
-        labelindex = []
-        for label in labels:  # 寻找需要的数据位置
-            for i in range(head):
-                if lines[i].find(label) != -1:
-                    labelindex.append(int(re.findall("\d+", lines[i])[0]))
-        # print(labelindex)
-        # print(simplehead)
-        f_output.write(simplehead)  # 写入精简后的文件头
-        for i in index:
-            item = lines[int(i) + head - 1].split()
-            for j in labelindex:
-                f_output.write("{}\t".format(item[j - 1]))
-            f_output.write('\n')
+        headdict, data = getclassdata(input_file, k)
+        savestar(output_file,headdict,data,simp)
     else:
-        for i in range(head):
-            f_output.write(lines[i])  # 写入标签头
-        for i in index:
-            f_output.write(lines[int(i) + head - 1])
+        f_input = open(input_file, 'r')  # 获取需要提取的序号
+        str_index = f_input.readline()
+        index = str_index.split()
+        headdict,data=readstarfile(source_file)
+        newdata=[]
+        for item in index:
+            newdata.append(data[int(item)])
+        savestar(output_file,headdict,newdata,simp)
 
-    f_source.close()
-    f_output.close()
-    f_input.close()
-
+        f_input.close()
 
 def usage():
     print("""usage:
-             -i:输入的序号文件名,请使用空格间隔
+             -i:输入的序号文件名,请使用空格间隔，如输入star文件，则需要参数k，不需要输入源文件
              -o:输出的star文件名
              -s:原始star文件名
+             -k:需要匹配的类别，可以输入多个类，‘，’间隔
+             -d:输出简洁的star文件
              -h:帮助
     """)
 
 
 if __name__ == '__main__':
-    getclassdata('run_ct1_it002_data.star', 3)
+    main()
