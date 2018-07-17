@@ -32,15 +32,18 @@ for op, value in opts:
     elif op == "-h":
         usage()
         sys.exit()
-
-indexs = np.random.randint(start, end, int(float(num) * (float(num) / float(end) - 0.04 + 1)))  # 会有重复，所以多生成一些
+if num < 50000:
+    indexs = np.random.randint(start, end, int(float(num) * (float(num) / float(end) - 0.04 + 1)))  # 会有重复，所以多生成一些
+else:
+    indexs = np.random.randint(start, end, int(float(num) * (float(num) / float(end) + 1.2)))
 print(len(indexs))
 indexs = list(set(indexs))  # 去重
 print(len(indexs))
-while len(indexs) >= num:  # 随机删除多余的
+while len(indexs) > num:  # 随机删除多余的
     indexs.pop(np.random.randint(0, len(indexs), 1))
 # print(len(indexs))
 indexs.sort()  # 排序
+print(len(indexs))
 
 #print(indexs[0:100])
 
