@@ -171,7 +171,8 @@ def main():
         savestar(output_file, headdict, newdata, simp)
 
         f_input.close()
-        print('output file is {}'.format(output_file))
+
+    print('output file is {}'.format(output_file))
 
 
 def usage():
