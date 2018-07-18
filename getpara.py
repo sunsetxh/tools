@@ -33,7 +33,7 @@ class Job:
                 if p.find('sigma_ang') != -1:
                     self.sigma_ang = p.split()[1]
             file.close()
-        except IOError,e:
+        except IOError, e:
             print(self.name + "is empty")
 
     def getmodel(self):
@@ -60,32 +60,24 @@ for p in path:
     if os.path.isdir(p):
         names.append(p)
 
-print names
+# print names
 names.sort()
-print names
+# print names
 
 outfile = open('result.txt', 'w')
 
 outfile.write(
-    '{:8s} \t{:40s} \t{:15s} \t{:8s} \t{:13s} \t{:8s} \t{:8s} \t{:8s}\n'.format('jobname', 'input', 'ref', 'ini_high',
+    '{:8s} \t{:40s} \t{:20s} \t{:8s} \t{:13s} \t{:8s} \t{:8s} \t{:8s}\n'.format('jobname', 'input', 'ref', 'ini_high',
                                                                                 'healpix_order', 'sigma_ang',
                                                                                 'averagePmax', 'classes'))
-# names = ['job001', 'job002', 'job003', 'job005', 'job006', 'job007', 'job029']
-
-# names = ['job008', 'job009', 'job010', 'job011', 'job015', 'job016', 'job017', 'job024', 'job025',
-#         'job027', 'job028', 'job030', 'job031', 'job032', 'job033']
-
-
-# for i in range(1, 33):
-#     names.append('job0{:0>2}'.format(i))
 
 for name in names:
     job = Job(name)
     job.getparameter()
     job.getmodel()
     outfile.write(
-        '{:8s} \t{:40s} \t{:15s} \t{:8s} \t{:13s} \t{:8s} \t{:8s}\t'.format(name, job.input, job.ref, job.ini_high, \
-                                                                            job.healpix_order, \
+        '{:8s} \t{:40s} \t{:20s} \t{:8s} \t{:13s} \t{:8s} \t{:8s}\t'.format(name, job.input, job.ref, job.ini_high,
+                                                                            job.healpix_order,
                                                                             job.sigma_ang, job.averagepmax))
     for cls in job.classes:
         outfile.write('{:8s}\t'.format(cls))
