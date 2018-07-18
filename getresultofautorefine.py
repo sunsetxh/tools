@@ -37,12 +37,12 @@ class Job:
         self.ini_high = ''
         self.healpix_order = ''
         self.averagepmax = ''
-        self.number=0
+        self.number = 0.0
 
     def getparameter(self):
         try:
-            file = open(self.name + '/' + 'run_it000_optimiser.star')
-            self.parameter = file.readlines()[1]
+            f = open(self.name + '/' + 'run_it000_optimiser.star')
+            self.parameter = f.readlines()[1]
 
             ps = self.parameter.split('--')
 
@@ -55,14 +55,14 @@ class Job:
                     self.ini_high = p.split()[1]
                 if p.find('healpix_order') != -1:
                     self.healpix_order = p.split()[1]
-            file.close()
+            f.close()
         except IOError, e:
             print(self.name + "is empty")
 
     def getmodel(self):
         try:
-            file = open(self.name + '/' + 'run_model.star')
-            lines = file.readlines()
+            f = open(self.name + '/' + 'run_model.star')
+            lines = f.readlines()
             for line in lines:
                 if line.find('_rlnAveragePmax') != -1:
                     self.averagepmax = line.split()[1]
@@ -70,18 +70,19 @@ class Job:
                     self.resolution = line.split()[1]
                 if line.find('data_model_classes') != -1:
                     break;
-            file.close()
+            f.close()
         except IOError, e:
             print self.name + " don't have result"
 
     def getnum(self):
-        headdict,data=readstarfile(self.name+'/'+'run_data.star')
-        self.number=len(data)
+        headdict, data = readstarfile(self.name + '/' + 'run_data.star')
+        self.number = len(data)
 
     def getresult(self):
         self.getmodel()
         self.getnum()
         self.getparameter()
+
 
 names = []
 
@@ -98,18 +99,17 @@ names.sort()
 outfile = open('result.txt', 'w')
 
 outfile.write(
-    '{:8s} \t{:40s} \t{:15s} \t{:8s} \t{:13s} \t{:8s} \t{:8s} \t{:8s}\n'.format('jobname', 'input', 'ref', 'ini_high',
-                                                                                'healpix_order',
-                                                                                'number','resolution'))
-
+    '{:8s} \t{:40s} \t{:15s} \t{:8s} \t{:8s} \t{:8s} \t{:8s}\n'.format('jobname', 'input', 'ref', 'ini_high',
+                                                                       'healpix_order',
+                                                                       'number', 'resolution'))
 
 for name in names:
     job = Job(name)
     job.getresult()
     outfile.write(
-        '{:8s} \t{:40s} \t{:15s} \t{:8s} \t{:13s} \t{:8s} \t{:8s}\t'.format(name, job.input, job.ref, job.ini_high, \
-                                                                            job.healpix_order, \
-                                                                            job.number, job.resolution))
+        '{:8s} \t{:40s} \t{:15s} \t{:8s} \t{:8s} \t{:8f} \t{:8s}\t'.format(name, job.input, job.ref, job.ini_high,
+                                                                           job.healpix_order,
+                                                                           job.number, job.resolution))
 
     outfile.write('\n')
 outfile.close()
