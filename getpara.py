@@ -64,7 +64,7 @@ print names
 names.sort()
 print names
 
-outfile = open('result-{}.txt'.format(time.strftime("%m%d%H%M")), 'w')
+outfile = open('result.txt', 'w')
 
 outfile.write(
     '{:8s} \t{:40s} \t{:15s} \t{:8s} \t{:13s} \t{:8s} \t{:8s} \t{:8s}\n'.format('jobname', 'input', 'ref', 'ini_high',
