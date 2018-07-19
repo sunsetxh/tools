@@ -88,7 +88,7 @@ def savestar(filename, headdict, data, simple=1):
         file.write('\ndata_\n\nloop_\n')
         head = sorted(headdict.items(), key=operator.itemgetter(1))
         for name, value in head:
-            file.write('_rln{} #{}\n'.format(name, value+1))
+            file.write('_rln{} #{}\n'.format(name, value + 1))
         for item in data:
             file.write(item)
     file.close()
@@ -131,14 +131,19 @@ def main():
     if output_file == "":
         nowtime = time.strftime("%m%d%H%M%S")
         if source_file == "":
-            output_file="class"
+            input_path = input_file.split('/')
+            length = len(input_path)
+            if length > 1:
+                output_file = '{}_class'.format(input_path[length - 2])
+            else:
+                output_file = 'class'
             for item in k:
-                output_file+='-{}'.format(item)
-            output_file+='-{}.star'.format(nowtime)
+                output_file += '_{}'.format(item)
+            output_file += '_{}.star'.format(nowtime)
         else:
-            output_file='{}.star'.format(input_file.split('.')[0])
+            output_file = '{}.star'.format(input_file.split('.')[0])
 
-    if len(source_file) == 0 and input_file.find('.star') == -1:
+    if source_file == '' and input_file.find('.star') == -1:
         print("请添加原文件 使用 -s file_name\n")
         sys.exit()
 
