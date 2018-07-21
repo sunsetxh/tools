@@ -35,11 +35,13 @@ classrtcnt = [0, 0, 0, 0, 0]
 
 for item in data:
     items = item.split()
-    clscnt[int(items[headdict.get('ClassNumber')])] += 1
+    clscnt[int(items[headdict.get('ClassNumber')]) - 1] += 1
     if items[headdict.get('ImageName')].find('group{}'.format(items[headdict.get('ClassNumber')])) != -1:
         count += 1
         classrtcnt[int(items[headdict.get('ClassNumber')]) - 1] += 1
 
 print('正确率 ＝ {:4f}％'.format(count * 100.0 / len(data)))
 for i in range(0, 5):
+    if clscnt[i] == 0:
+        print('class {} = {:4f}%'.format(i + 1, 0.0))
     print('class {} = {:4f}%'.format(i + 1, classrtcnt[i] * 100.0 / clscnt[i]))
