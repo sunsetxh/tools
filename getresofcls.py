@@ -33,7 +33,7 @@ count = 0
 
 for item in data:
     items = item.split()
-    if items[headdict.get('ImageName')].find('group{}'.format(items[headdict.get('ClassNumber')])) == -1:
+    if items[headdict.get('ImageName')].find('group{}'.format(items[headdict.get('ClassNumber')])) != -1:
         count += 1
 
 print('正确率 ＝ {:4f}％'.format(count * 100.0 / len(data)))
