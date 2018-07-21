@@ -27,11 +27,15 @@ def readstarfile(filename):
     f_star.close()
     return headdict, data
 
-headdict,data=readstarfile(sys.argv[1])
-count=0
-for item in data:
-    items=item.split()
-    if items[headdict.get('GroupNumber')] == items[headdict.get('ClassNumber')]:
-        count+=1
 
-print('正确率 ＝ {:4f}％'.format(count*100.0/len(data)))
+headdict, data = readstarfile(sys.argv[1])
+count = 0
+count2 =0
+for item in data:
+    items = item.split()
+    if items[headdict.get('GroupNumber')] == items[headdict.get('ClassNumber')]:
+        count += 1
+    if items[headdict.get('ImageName')].find('group{}'.format(items[headdict.get('GroupNumber')])) == -1:
+        count2+=1
+print('gourp 不匹配数量 ＝ {}'.format(count2))
+print('正确率 ＝ {:4f}％'.format(count * 100.0 / len(data)))
