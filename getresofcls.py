@@ -30,10 +30,14 @@ def readstarfile(filename):
 
 headdict, data = readstarfile(sys.argv[1])
 count = 0
+classcnt = [0, 0, 0, 0, 0]
 
 for item in data:
     items = item.split()
     if items[headdict.get('ImageName')].find('group{}'.format(items[headdict.get('ClassNumber')])) != -1:
         count += 1
+        classcnt[int(items[headdict.get('ClassNumber')]) - 1] += 1
 
 print('正确率 ＝ {:4f}％'.format(count * 100.0 / len(data)))
+for i in range(0,5):
+    print('class {} = {:4f}%'.format(i+1,classcnt[i] * 100.0 / 10000))
