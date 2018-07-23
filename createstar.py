@@ -76,10 +76,15 @@ def getclassdata(filename, k):
 def savestar(filename, headdict, data, simple=1):
     file = open(filename, 'w')
     if simple == 1:
-        file.write(simplehead)
+        headlabel=[]
         labelitems = []
         for label in labels:
-            labelitems.append(headdict.get(label, 0))
+            if headdict.get(label) != None:
+                headlabel.append(label)
+                labelitems.append(headdict.get(label, 0))
+        file.write('\ndata_\n\nloop_\n')
+        for i in range(len(headlabel)):
+            file.write('_rln{} #{}\n'.format(headlabel[i],i+1))
         for item in data:
             for j in labelitems:
                 file.write('{}\t'.format(item.split()[j]))
