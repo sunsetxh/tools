@@ -61,7 +61,10 @@ f.write('{:20d}\t'.format(len(data)))
 f.write('\n')
 f.write('{:20s}\t'.format('Correct rate'))
 for i in range(0,5):
-    f.write('{:20f}%\t'.format(classrtcnt[i]*100.0/clscnt[i]))
+    if clscnt[i] == 0:
+        f.write('{:20f}%\t'.format(0))
+    else:
+        f.write('{:20f}%\t'.format(classrtcnt[i]*100.0/clscnt[i]))
 f.write('{:20f}%\t'.format(count * 100.0/len(data)))
 f.write('\n\n\n\n')
 f.close()
