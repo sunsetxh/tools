@@ -43,5 +43,25 @@ for item in data:
 print('正确率 ＝ {:4f}％'.format(count * 100.0 / len(data)))
 for i in range(0, 5):
     if clscnt[i] == 0:
-        print('class {} = {:4f}%'.format(i + 1, 0.0))
-    print('class {} = {:4f}%'.format(i + 1, classrtcnt[i] * 100.0 / clscnt[i]))
+        print('class {} = {:4f}% number = {}'.format(i + 1, 0.0,clscnt[i]))
+    else:
+        print('class {} = {:4f}% number = {}'.format(i + 1, classrtcnt[i] * 100.0 / clscnt[i],clscnt[i]))
+
+f=open('result.txt','a')
+f.write('{}\n'.format(sys.argv[1]))
+f.write('{:20s}\t'.format('result'))
+for i in range(1,6):
+    f.write('{:>18s} {:1d}\t'.format('class',i))
+f.write('{:>20s}\t'.format('total'))
+f.write('\n')
+f.write('{:20s}\t'.format('Number of particles'))
+for i in range(0,5):
+    f.write('{:20d}\t'.format(clscnt[i]))
+f.write('{:20d}\t'.format(len(data)))
+f.write('\n')
+f.write('{:20s}\t'.format('Correct rate'))
+for i in range(0,5):
+    f.write('{:20f}%\t'.format(classrtcnt[i]*100.0/clscnt[i]))
+f.write('{:20f}%\t'.format(count * 100.0/len(data)))
+f.write('\n\n\n\n')
+f.close()
