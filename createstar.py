@@ -17,25 +17,6 @@ labels = ['MicrographName', 'CoordinateX', 'CoordinateY', 'ImageName',
           'SphericalAberration', 'AmplitudeContrast',
           'Magnification', 'DetectorPixelSize', 'CtfFigureOfMerit']
 
-simplehead = """
-data_
-
-loop_
-_rlnMicrographName #1
-_rlnCoordinateX #2
-_rlnCoordinateY #3
-_rlnImageName #4
-_rlnDefocusU #5
-_rlnDefocusV #6
-_rlnDefocusAngle #7
-_rlnVoltage #8
-_rlnSphericalAberration #9
-_rlnAmplitudeContrast #10
-_rlnMagnification #11
-_rlnDetectorPixelSize #12
-_rlnCtfFigureOfMerit #13
-"""
-
 
 # 将star文件读取到内存中
 def readstarfile(filename):
