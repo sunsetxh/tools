@@ -1,13 +1,12 @@
 # python2.7
 # coding:utf-8
 import os
-
 import operator
+import threading
+import time
 
 # 存储star文件，支持原数据存储和简洁数据存储
-import threading
-
-import time
+import sys
 
 
 def savestar(filename, headdict, data):
@@ -64,8 +63,10 @@ for f in files:
 
 cluses.sort()
 print(cluses)
-
-snr = 0.9
+if len(sys.argv) > 1:
+    snr = float(sys.argv[1])
+else:
+    snr = 0.1
 parnum = 10000
 opdirs = []
 outputdir = 'Output/snr{0}'.format(int(snr * 10))
@@ -85,8 +86,7 @@ for t in threads:
 print('start to create star file')
 headdict = {'Voltage': 0, 'DefocusU': 1, 'DefocusV': 2, 'DefocusAngle': 3, 'SphericalAberration': 4,
             'AmplitudeContrast': 5,
-            'AngleRot': 6, 'AngleTilt': 7, 'AnglePsi': 8, 'OriginX': 9, 'OriginY': 10,
-            'ImageName': 11}
+            'ImageName': 6}
 data = []
 for dir in opdirs:
     anglefile = open('{0}/angledocs.dat'.format(dir), 'r')
@@ -99,20 +99,13 @@ for dir in opdirs:
         angleitems = anglelines[i].split()
         shiftitems = shiftlines[i].split()
         ctfitems = ctflines[i].split()
-        line = '{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6:10s}\t{7:10s}\t{8:10s}\t{9}\t{10}\t{11:6d}@{12}/{13}.mrcs\n'.format(
+        line = '{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6:6d}@{7}/{8}.mrcs\n'.format(
             ctfitems[0],
             ctfitems[2],
             ctfitems[3],
             ctfitems[4],
             ctfitems[5],
             ctfitems[6],
-            angleitems[2],
-            angleitems[3],
-            angleitems[4],
-            -1 * float(
-                shiftitems[2]),
-            -1 * float(
-                shiftitems[3]),
             i,
             'Image', dir.split('/')[2])
         data.append(line)
