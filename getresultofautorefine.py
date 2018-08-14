@@ -65,7 +65,7 @@ class Job:
             if line.find('_rlnCurrentResolution') != -1:
                 self.resolution = line.split()[1]
             if line.find('data_model_classes') != -1:
-                break;
+                break
         f.close()
 
     def getnum(self):
