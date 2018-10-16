@@ -31,7 +31,7 @@ def getdatastar():
     datas = []
     path = os.listdir(os.getcwd())
     for p in path:
-        if p.find('_data.star'):
+        if p.find('_data.star') != -1:
             datas.append(p)
     datas.sort()
     return datas

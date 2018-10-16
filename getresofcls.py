@@ -38,7 +38,10 @@ for line in data:
     groupnum = int(vars[headdict['ImageName']][-6])
     cnt[clsnum - 1][groupnum - 1] += 1
 
-print(cnt)
+for i in cnt:
+    for j in i:
+        print(j,end='\t')
+    print()
 
 f_det = open('detailedresult.txt', 'w')
 for i in range(5):
