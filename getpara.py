@@ -31,7 +31,7 @@ class Job:
                 if p.find('offset_step') != -1:
                     self.offset_step = p.split()[1]
             file.close()
-        except IOError, e:
+        except IOError as e:
             print(self.name + "is empty")
 
     def getmodel(self):
@@ -46,8 +46,8 @@ class Job:
                 if line.find('data_model_class_1') != -1:
                     break
             file.close()
-        except IOError, e:
-            print self.name + " don't have result"
+        except IOError as e:
+            print(self.name + " don't have result")
 
 
 # 将star文件读取到内存中
