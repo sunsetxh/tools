@@ -1,10 +1,8 @@
 # coding=utf-8
-
-
-# 将star文件读取到内存中
 import sys
 
 
+# 将star文件读取到内存中
 def readstarfile(filename):
     f_star = open(filename, 'r')
     lines = f_star.readlines()
