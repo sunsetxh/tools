@@ -1,7 +1,8 @@
 import numpy as np
 import sys
 
-
+#类别总数，主要用于求平均值
+clsnum=2
 
 def readstarfile(filename):
     f_star = open(filename, 'r')
@@ -40,7 +41,7 @@ for line in file_diff2:
     elif i != -1:
         min_index = temp.index(min(temp[2:]))
         temp.append(min_index - 1)#添加最小值
-        diff2_avg = float(np.average(temp[2:]))
+        diff2_avg = float(np.average(temp[2:2+clsnum]))
         temp.append(diff2_avg)#添加均值
         # for j in temp[2:]):
         #   j -= diff2_min
