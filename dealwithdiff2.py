@@ -4,6 +4,7 @@ import os
 
 # 类别总数，主要用于求平均值
 clsnum = 2
+clsname = 'glob_dis4+127_0_160.mrcs'
 
 
 def mergefiles():
@@ -12,21 +13,15 @@ def mergefiles():
 
     files.sort()
     filelist = []
+    # delete the files which we not need
     for f in files:
-        print('{}  {}'.format(f, len(f)))
         if len(f) == 20:
-            print(f)
             filelist.append(f)
 
     del files
-
-    print('result--------------------->')
-    for f in filelist:
-        print('{}  {}'.format(f, len(f)))
-
     group = [[] for i in range(10)]
-    print(group)
 
+    # files classfication
     for f in filelist:
         file = open(f, 'r')
         for line in file:
@@ -34,10 +29,7 @@ def mergefiles():
             if grpnum != 0:
                 group[grpnum - 1].append(f)
                 break
-
-    for lis in group:
-        print(lis)
-
+    # merge the files which have the same group
     for i in range(len(group)):
         if len(group[i]) != 0:
             name = 'diff2_group{}'.format(i + 1)
@@ -73,29 +65,29 @@ def readstarfile(filename):
     return headdict, data
 
 
-def dealwithdata(input, output, clsnum):
-    file_diff2 = open(input, 'r')
+def dealwithdata(infile, outfile, clsnum, clsname):
+    file_diff2 = open(infile, 'r')
     i = -1
     # group num 0 1 2 3 4
     diff2 = []
     temp = []
 
     for line in file_diff2:
-        items = line.split()
+        items = line.split('\t')
         if i == int(items[0]):
-            temp.append(float(items[3]))
+            temp.append(float(items[3]))  # find the same particle and append
             continue
         elif i != -1:
-            min_index = temp.index(min(temp[2:]))
-            temp.append(min_index - 1)  # 添加最小值
-            diff2_avg = float(np.average(temp[2:2 + clsnum]))
+            min_index = temp.index(min(temp[3:]))
+            temp.append(min_index - 3)  # 添加最小值
+            diff2_avg = float(np.average(temp[3:3 + clsnum]))
             temp.append(diff2_avg)  # 添加均值
             # for j in temp[2:]):
             #   j -= diff2_min
             # temp.append(float(max(temp[2:]) - min(temp[2:])))
             # 添加差值
-            if len(temp) == 6:
-                temp.append(temp[2] - temp[3])
+            if len(temp) == 7:
+                temp.append(temp[3] - temp[4])
             else:
                 temp.append(temp[temp[0] + 1] - temp[min_index])
             # 将该行数据添加至列表
@@ -106,20 +98,21 @@ def dealwithdata(input, output, clsnum):
                 del temp
                 temp = []
 
-        if items[1].find('group') != -1:
-            temp.append(int(items[1][items[1].index('group') + 5]))
-            temp.append(int(items[1][0:(items[1].index('@'))]))
-        else:
-            temp.append(int(items[0]))
-            if items[1].find('atp_0_160.mrcs') != -1:
-                temp.append(0)
+        if items[1].find('group') != -1:  # support more than 2 classes
+            temp.append(int(items[1][items[1].index('group') + 5]))  # temp[0]
+            temp.append(int(items[1][0:(items[1].index('@'))]))  # temp[1]
+        else:  # only support 2 classes
+            temp.append(int(items[0]))  # temp[0]
+            if items[1].find(clsname) != -1:
+                temp.append(0)  # temp{1]
             else:
-                temp.append(1)
+                temp.append(1)  # temp[1]
+        temp.append(items[1])  # temp[2]
         temp.append(float(items[3]))
         i = int(items[0])
 
     diff2.sort()
-    output = open(output, 'w')
+    output = open(outfile, 'w')
     fmt = []
     for item in diff2[0]:
         tpy = type(item)
@@ -144,5 +137,4 @@ def dealwithdata(input, output, clsnum):
 
 files = mergefiles()
 for f in files:
-    dealwithdata(f, '{}.txt'.format(f), clsnum)
-
+    dealwithdata(f, '{}.txt'.format(f), clsnum, clsname)
