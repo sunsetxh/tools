@@ -14,7 +14,8 @@ def sleep(sec):
         time.sleep(sec)
     else:
         while sec != 0:
-            sys.stdout.write('\rsleep {}m {}s '.format((int(sec / 60)), (sec % 60)))
+            sys.stdout.write('\rsleep {}m {}s '.format(
+                (int(sec / 60)), (sec % 60)))
             sys.stdout.flush()
             time.sleep(1)
             sec = sec - 1
@@ -77,7 +78,7 @@ def into_checkpoint():
 
 
 def dialog_btn_center():
-    os.system('adb shell input tap 540 1000')
+    os.system('adb shell input tap 540 1100')
 
 
 def dialog_btn_1():
@@ -145,15 +146,19 @@ def reply_hp(times, is_life=0):
     status_btn()
 
 
-def tap_with_hp():
+#带回血的点击
+def tap_with_hp(btn1=1, btn2=1, hptime=60):
+    btn = [[],
+           [None, btn1_1, btn1_2, btn1_3, btn2_1, btn2_2, btn2_3],
+           [dialog_btn_center, dialog_btn_1, dialog_btn_2, dialog_btn_3, dialog_btn_4, dialog_btn_5]]
     i = 0
     while 1:
-        btn2_1()
+        btn[1][btn1]()
         # sleep(1)
-        dialog_btn_1()
+        btn[2][btn2]()
         # sleep(1)
         i += 1
-        if i % 60 == 0:
+        if i % hptime == 0:
             reply_hp(10)
         print(i)
         print("经验 : %d" % (i * 30))
@@ -181,6 +186,7 @@ def task1_2():
         print("经验 : %d" % (i * 15))
 
 
+# 向师傅磕头
 def kowtow():
     i = 0
     while 1:
@@ -289,4 +295,16 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    # tap_with_hp(btn1=3,btn2=0,hptime=30)
+    i=0
+    while 1:
+        btn1_2()
+        dialog_btn_center()
+        btn1_1()
+        dialog_btn_center()
+        tap(300,1000)
+        tap(250,1937)
+        i+=1
+        if i%30==0:
+            reply_hp(10)
+
