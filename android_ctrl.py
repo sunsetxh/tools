@@ -146,7 +146,7 @@ def reply_hp(times, is_life=0):
     status_btn()
 
 
-#带回血的点击
+#带回血的点�?
 def tap_with_hp(btn1=1, btn2=1, hptime=60):
     btn = [[],
            [None, btn1_1, btn1_2, btn1_3, btn2_1, btn2_2, btn2_3],
@@ -298,13 +298,15 @@ if __name__ == '__main__':
     # tap_with_hp(btn1=3,btn2=0,hptime=30)
     i=0
     while 1:
-        btn1_2()
-        dialog_btn_center()
         btn1_1()
         dialog_btn_center()
-        tap(300,1000)
-        tap(250,1937)
-        i+=1
-        if i%30==0:
-            reply_hp(10)
+        # btn1_2()
+        # dialog_btn_center()
+        # btn1_1()
+        # dialog_btn_center()
+        # tap(300,1160)
+        # tap(250,1937)
+        # i+=1
+        # if i%30==0:
+        #     reply_hp(10)
 
